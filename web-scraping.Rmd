@@ -9,22 +9,82 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+```{r web scrapping}
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+library(tidyverse)
+library(rvest)
+library(tibble)
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+html <- read_html("https://www.scrapethissite.com/pages/simple/")
+html
 
-```{r cars}
-summary(cars)
+
+
+
+
 ```
 
-## Including Plots
+```{r}
+block <- html |>
+  html_elements("div.col-md-4.country")
+block
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```
+```{r}
+country_name <- html |>
+  html_elements("h3.country-name") |>
+  html_text2()
+country_name
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+
+
+Countries_capital <- html |>
+  html_elements("span.country-capital") |>
+  html_text2()
+Countries_capital
+```
+
+```{r}
+Countries_population <- html |>
+  html_elements("span.country-population") |>
+  html_text2()
+Countries_population
+
+```
+
+```{r}
+
+Countries_total_area <- html |>
+  html_elements("span.country-area") |>
+  html_text2()
+Countries_total_area
+```
+
+
+
+
+
+```{r}
+library(tibble)
+
+
+library(tibble)
+countries_table <- tibble(
+  country_name = country_name,
+  Countries_capital = Countries_capital,
+  Countries_population = Countries_population,
+  Countries_total_area = Countries_total_area
+)
+
+countries_table
+
+
+
+```
+
+
+
+

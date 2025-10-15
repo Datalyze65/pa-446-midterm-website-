@@ -1,0 +1,59 @@
+---
+title: "Civic Analytics Midterm – Part One"
+subtitle: "PA 446: Coding for Civic Data Applications"
+author: "Ismael Tapia"
+date: "`r format(Sys.Date(), '%A • %B %d, %Y')`"
+output:
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    code_folding: hide
+    highlight: tango
+    df_print: paged
+    number_sections: false
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+i Describe a civic problem and its implication for the community. Be as
+specific as possible.
+
+A civic problem would be the current immigration raid in Chicago as well
+as how it is impacting the economy at large in the city. Equally so,
+people that were here 20 years ago and have had A clean record is being
+deported in large numbers and without due process. This nevertheless,
+has impacted families across the board and has led to a mental toll on
+our kids' future. Data Science paired with civic technology and public
+policy has made a difference. These tools have provided powerful
+arguments to why This current immigration policy is not only bad for
+Chicago, but the United States as a global powerhouse. The institute on
+taxation and economic policy made an analysis explaining a pie chart
+that undocumented workers paid a total of 96.7 billion dollars annually.
+32.3 billion went to federal social insurance taxes along with state and
+local taxes with 37.7 billion dollars, next came in federal income taxes
+with 19.6 billion and lastly, misc federal taxes with a grand total of
+7.6 billion dollars respectively. The same institute also conducted
+another study and it showed a bar chart showing that unauthorized
+immigrants paid more of their taxes showing an 8 percent representation
+percentage in comparison to the richest 1 percent only paying 5.4
+percent. There are also lots of sectors in our economy such as
+construction where there are lots of houses left unfinished in Florida
+due to fear of deportation and has caused construction companies to lose
+money. Recently, Marjorie Taylor Green from the United States house of
+representatives was in a podcast expressing her views and said that you
+cannot round of every single person you see on the streets who is
+undocumented and that she recently became a business owner in the
+construction industry.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+

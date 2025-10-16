@@ -1,0 +1,177 @@
+---
+title: "data-wrangling.Rmd"
+author: "Ismael Tapia"
+date: "2025-10-15"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(tidycensus)
+
+library(tidyverse)
+
+library(dplyr)
+
+Census_api_data <- get_acs(
+  geography = "county",
+  variables = c(
+    income = "B19013_001E",
+    broadband = "B28002_004E",
+    total_households = "B28002_001E"
+  ),
+  state = "IL",
+  year = 2023
+)
+
+head(Census_api_data)
+
+
+
+
+```
+```{r}
+
+
+library(tidyr)
+
+Census_api_pivot_wider <- Census_api_data %>%
+  select(NAME, variable, estimate) %>%
+  pivot_wider(
+    names_from = variable,
+    values_from = estimate
+  )
+
+head(Census_api_pivot_wider)
+
+
+
+```
+
+
+```{r}
+
+Census_api_simple_names <- Census_api_pivot_wider %>%
+  dplyr::rename(
+    county           = NAME,
+    income           = B19013_001,
+    total_households = B28002_001,
+    broadband        = B28002_004
+  )
+
+Census_api_simple_names
+
+```
+
+```{r}
+Census_api_simple_names <- Census_api_simple_names %>%
+  tidyr::separate(county, into = c("County", "State"), sep = ", ", remove = FALSE)
+
+Census_api_simple_names
+```
+```{r}
+
+Census_api_partb <- Census_api_simple_names%>%
+  dplyr::mutate(
+    broadband_rate = round((broadband / total_households) * 100, 2)
+  )
+Census_api_partb
+```
+
+```{r}
+
+
+broadbands_highest_to_lowest <- Census_api_partb %>%
+  dplyr::arrange(dplyr::desc(broadband_rate))
+
+head(broadbands_highest_to_lowest, 10)
+
+
+```
+
+
+
+```{r}
+
+average_broadband <- mean(Census_api_partb$broadband_rate, na.rm = TRUE)
+median_broadband <- median(Census_api_partb$broadband_rate, na.rm = TRUE)
+
+average_broadband
+median_broadband
+
+
+first_five_countries <- Census_api_partb %>%
+  dplyr::arrange(desc(broadband_rate)) %>%
+  head(5)
+
+last_five_countries <- Census_api_partb %>%
+  dplyr::arrange(broadband_rate) %>%
+  head(5)
+
+
+```
+
+```{r}
+first_five_countries
+```
+
+
+```{r}
+last_five_countries
+```
+
+```{r}
+library(ggplot2)
+ggplot(Census_api_partb, aes(x = income, y = broadband_rate)) +
+  geom_point(color = "turquoise", alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, color = "pink") +
+  labs(
+    title = "Income vs Broadband Access (Illinois Counties, 2023)",
+    x = "Average  Household Income ",
+    y = " Access to broadband Rate "
+  ) +
+  theme_minimal()
+
+```
+
+
+```{r}
+
+first_ten_countries <- Census_api_partb %>% arrange(desc(broadband_rate)) %>% head(10)
+lowest_ten_countries <- Census_api_partb %>% arrange(broadband_rate) %>% head(10)
+
+first_and_last <- dplyr::bind_rows(first_ten_countries, lowest_ten_countries)
+
+ggplot(first_and_last, aes(x = reorder(County, broadband_rate), y = broadband_rate, fill = broadband_rate)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = " first ten and last ten countries by broadband availability ",
+    x = "County",
+    y = "acssess to broadbands rate"
+  ) +
+  theme_minimal()
+```
+
+
+```{r}
+
+
+ggplot(Census_api_partb, aes(x = reorder(County, broadband_rate), y = broadband_rate)) +
+  geom_col(fill = "skyblue") +
+  coord_flip() +
+  labs(
+    title = "Broadband Accessability in the state of illinois Counties in the year of 2023",
+    x = "County",
+    y = "accsess to broadband rates"
+  ) +
+  theme_minimal()
+
+
+```
+
+
